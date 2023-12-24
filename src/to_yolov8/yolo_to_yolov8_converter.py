@@ -16,11 +16,12 @@ class YoloToYolov8Converter(Converter):
     Yolo to Yolov8 specific converter.
     """
 
-    def convert(self, source_dir: Path, dest_dir: Union[None, Path] = None) -> None:
+    def convert(self, source_dir: Path, dest_dir: Union[None, Path] = None, train_ratio: float = 0.7,
+                val_ratio: float = 0.2) -> None:
         work_dir = dest_dir if dest_dir else source_dir
         self._validate_yolo_dir_structure(source_dir=source_dir)
         self._create_directory_structure(source_dir=source_dir, dest_dir=work_dir, overwrite=True)
-        self._split_datasets(source_dir=source_dir, dest_dir=dest_dir)
+        self._split_datasets(source_dir=source_dir, dest_dir=dest_dir, train_ratio=train_ratio, val_ratio=val_ratio)
         class_file = self._find_text_file(source_dir=source_dir)
         self._create_data_yaml(dest_dir=work_dir, class_file=class_file)
 
@@ -78,8 +79,8 @@ class YoloToYolov8Converter(Converter):
 
     # Logic to create the directory structure for YOLOv8
 
-    def _split_datasets(self, source_dir: Path, dest_dir: Union[Path, None], train_ratio: float = 0.7,
-                        val_ratio: float = 0.2) -> None:
+    def _split_datasets(self, source_dir: Path, dest_dir: Union[Path, None], train_ratio: float,
+                        val_ratio: float) -> None:
         input_img_dir = source_dir / "images"
         output_img_dir = source_dir / "labels"
 
