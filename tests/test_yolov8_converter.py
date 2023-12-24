@@ -1,8 +1,7 @@
 import shutil
-
-import pytest
 from pathlib import Path
 
+import pytest
 from src.to_yolov8.yolo_to_yolov8_converter import YoloToYolov8Converter
 
 TEST_FOLDER = Path(__file__).parents[0]

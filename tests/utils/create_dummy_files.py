@@ -1,5 +1,5 @@
-import shutil
 import json
+import shutil
 from pathlib import Path
 from typing import Union
 
@@ -13,8 +13,8 @@ def create_dummy_img(file_path: Path) -> None:
     Args:
     file_path (Path): The path where the dummy PNG file will be created.
     """
-    with open(file_path, 'wb') as f:
-        f.write(b'\x89PNG\r\n\x1a\n')
+    with open(file_path, "wb") as f:
+        f.write(b"\x89PNG\r\n\x1a\n")
 
 
 def crete_dummy_label(file_path: Path) -> None:
@@ -24,7 +24,7 @@ def crete_dummy_label(file_path: Path) -> None:
     Args:
     file_path (Path): The path where the dummy PNG file will be created.
     """
-    with open(file_path, 'w') as f:
+    with open(file_path, "w") as f:
         f.write("This is a dummy label file")
 
 
@@ -34,10 +34,9 @@ def create_dummy_classes_file(file_path: Path) -> None:
     Args:
     file_path (Path): The path where the dummy PNG file will be created
     """
-    content = "ElectricalOutlet\n" \
-              ""
+    content = "ElectricalOutlet\n" ""
     classes_file = file_path / "classes.txt"
-    with open(classes_file, 'w') as f:
+    with open(classes_file, "w") as f:
         f.write(content)
 
 
@@ -48,22 +47,13 @@ def create_dummy_notes_file(file_path: Path) -> None:
     file_path (Path): The path where the dummy PNG file will be created
     """
     content = {
-        "categories": [
-            {
-                "id": 0,
-                "name": "ElectricalOutlet"
-            }
-        ],
-        "info": {
-            "year": 2023,
-            "version": "1.0",
-            "contributor": "Label Studio"
-        }
+        "categories": [{"id": 0, "name": "ElectricalOutlet"}],
+        "info": {"year": 2023, "version": "1.0", "contributor": "Label Studio"},
     }
 
     notes_file = file_path / "notes.json"
 
-    with open(notes_file, 'w', encoding='utf-8') as file:
+    with open(notes_file, "w", encoding="utf-8") as file:
         json.dump(content, file, indent=4)
 
 
