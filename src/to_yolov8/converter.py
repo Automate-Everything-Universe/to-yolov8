@@ -2,8 +2,8 @@
 Interface for the converter pater.
 """
 from abc import ABC, abstractmethod
-from ctypes import Union
 from pathlib import Path
+from typing import Union
 
 
 class Converter(ABC):
@@ -12,7 +12,7 @@ class Converter(ABC):
     """
 
     @abstractmethod
-    def convert(self, source_dir: Path, dest_dir: Union[None, Path]) -> None:
+    def convert(self, source_dir: Path, dest_dir: Union[None, Path] = None) -> None:
         """
         Method which converts to yolov8 format.
         :return:
