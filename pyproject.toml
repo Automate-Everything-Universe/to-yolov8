@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "to_yolov8"
+version = "0.1.0"
+description = "The 'to_yolov8' package facilitates the conversion of datasets from the YOLO format (Label Studio) to the YOLOv8 format, which is compatible with Ultralytics models.
+This utility is designed to streamline the process of preparing datasets for training and evaluating machine learning models in the YOLOv8 architecture.
+"
+authors = [{ name = "Dragos Josan", email = "dragosjosan@gmail.com" }]
+license = {file = "LICENSE.txt"}
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+dependencies = [
+    "pytest",
+    "PyYAML",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[project.scripts]
+to_yolov8 = "cli:main"
