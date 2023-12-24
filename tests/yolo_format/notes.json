@@ -1,13 +1,13 @@
 {
-  "categories": [
-    {
-      "id": 0,
-      "name": "ElectricalOutlet"
+    "categories": [
+        {
+            "id": 0,
+            "name": "ElectricalOutlet"
+        }
+    ],
+    "info": {
+        "year": 2023,
+        "version": "1.0",
+        "contributor": "Label Studio"
     }
-  ],
-  "info": {
-    "year": 2023,
-    "version": "1.0",
-    "contributor": "Label Studio"
-  }
 }
