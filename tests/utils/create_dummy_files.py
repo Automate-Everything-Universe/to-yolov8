@@ -46,7 +46,7 @@ def setup_dummy_files(folder_path: Union[Path, str], number_of_files: int = 100)
     images_path.mkdir(parents=True, exist_ok=True)
     labels_path.mkdir(parents=True, exist_ok=True)
 
-    for i in range(1Add, number_of_files, 1):
+    for i in range(1, number_of_files, 1):
         file_path = folder_path / "images" / f"dummy_{i}.png"
         label_path = folder_path / "labels" / f"dummy_{i}.txt"
         create_dummy_img(file_path)
