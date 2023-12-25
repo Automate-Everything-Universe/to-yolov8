@@ -1,6 +1,4 @@
-import os
 import subprocess
-import venv
 import shutil
 from pathlib import Path
 
@@ -40,12 +38,6 @@ def test_yolov8_converter_class(source_dir, dest_dir):
 
 def test_yolov8_converter_instalation(source_dir, dest_dir):
     try:
-        # Step 1: Create a virtual environment
-        # venv_dir = TEST_FOLDER / Path("venv_test")
-        # venv.create(venv_dir, with_pip=True)
-
-        # Path to the Python executable inside the virtual environment
-        # venv_python = venv_dir / "bin" / "python"
         # Build the package
         subprocess.run(["python", "-m", "build"], check=True, cwd=PROJECT_FOLDER)
 
