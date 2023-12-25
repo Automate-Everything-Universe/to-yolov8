@@ -1,2 +1,4 @@
 /venv/
 /tests/.pytest_cache
+/tests/yolov8_result/
+/.idea/
