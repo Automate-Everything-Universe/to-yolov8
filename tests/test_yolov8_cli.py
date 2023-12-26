@@ -46,6 +46,12 @@ def test_yolov8_converter_class(source_dir, dest_dir):
 
 def test_yolov8_converter_instalation(source_dir, dest_dir):
     try:
+        dist_folder = PROJECT_FOLDER / "dist"
+        if dist_folder.exists():
+            shutil.rmtree(dist_folder)
+        # Install build module
+        subprocess.run(["python", "-m", "pip", "install", "build"], check=True, cwd=PROJECT_FOLDER)
+
         # Build the package
         subprocess.run(["python", "-m", "build"], check=True, cwd=PROJECT_FOLDER)
 
@@ -78,4 +84,3 @@ def test_yolov8_converter_instalation(source_dir, dest_dir):
         shutil.rmtree(dest_dir)
     except subprocess.CalledProcessError as e:
         print(f"Error occurred: {e.output.decode()}")  # Add this line
-        raise
