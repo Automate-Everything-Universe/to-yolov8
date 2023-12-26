@@ -17,11 +17,11 @@ class YoloToYolov8Converter(Converter):
     """
 
     def convert(
-            self,
-            source_dir: Path,
-            dest_dir: Union[None, Path] = None,
-            train_ratio: float = 0.7,
-            val_ratio: float = 0.2,
+        self,
+        source_dir: Path,
+        dest_dir: Union[None, Path] = None,
+        train_ratio: float = 0.7,
+        val_ratio: float = 0.2,
     ) -> None:
         work_dir = dest_dir if dest_dir else source_dir
         self._validate_yolo_dir_structure(source_dir=source_dir)
@@ -64,7 +64,7 @@ class YoloToYolov8Converter(Converter):
             raise OSError(f"An error occured while opening: {source_dir}") from exc
 
     def _create_directory_structure(
-            self, source_dir: Path, dest_dir: Union[Path, None], overwrite: bool = False
+        self, source_dir: Path, dest_dir: Union[Path, None], overwrite: bool = False
     ) -> None:
         """
         Creates the yolov8 folder structure
@@ -86,7 +86,7 @@ class YoloToYolov8Converter(Converter):
     # Logic to create the directory structure for YOLOv8
 
     def _split_datasets(
-            self, source_dir: Path, dest_dir: Union[Path, None], train_ratio: float, val_ratio: float
+        self, source_dir: Path, dest_dir: Union[Path, None], train_ratio: float, val_ratio: float
     ) -> None:
         input_img_dir = source_dir / "images"
         output_img_dir = source_dir / "labels"

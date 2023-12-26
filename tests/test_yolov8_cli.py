@@ -1,5 +1,5 @@
-import subprocess
 import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -23,8 +23,16 @@ def dest_dir() -> Path:
 
 
 def test_yolov8_converter_class(source_dir, dest_dir):
-    command = ["python", str(MAIN), "--source_dir", str(source_dir), "--dest_dir", str(dest_dir), "--split",
-               SPLIT_RATIO]
+    command = [
+        "python",
+        str(MAIN),
+        "--source_dir",
+        str(source_dir),
+        "--dest_dir",
+        str(dest_dir),
+        "--split",
+        SPLIT_RATIO,
+    ]
 
     result = subprocess.run(command, capture_output=True, check=True, timeout=180)
 
@@ -45,11 +53,21 @@ def test_yolov8_converter_instalation(source_dir, dest_dir):
         whl_file = PROJECT_FOLDER / "dist" / "to_yolov8-0.1.0-py3-none-any.whl"
 
         # Step 2: Install your library in the virtual environment
-        subprocess.run(["python", "-m", "pip", "install", str(whl_file)], check=True, cwd=PROJECT_FOLDER)
+        subprocess.run(
+            ["python", "-m", "pip", "install", str(whl_file)], check=True, cwd=PROJECT_FOLDER
+        )
 
         # Step 3: Run your CLI script
-        command = ["python", str(MAIN), "--source_dir", str(source_dir), "--dest_dir", str(dest_dir), "--split",
-                   SPLIT_RATIO]
+        command = [
+            "python",
+            str(MAIN),
+            "--source_dir",
+            str(source_dir),
+            "--dest_dir",
+            str(dest_dir),
+            "--split",
+            SPLIT_RATIO,
+        ]
         result = subprocess.run(command, capture_output=True, check=True, timeout=180)
 
         # Assertions
