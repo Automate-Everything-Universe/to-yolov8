@@ -2,9 +2,11 @@
 Main entry
 """
 import argparse
+import sys
 from pathlib import Path
 from typing import Tuple
 
+from to_yolov8.custom_errors import InvalidDirectoryStructureError
 from to_yolov8.yolo_to_yolov8_converter import YoloToYolov8Converter
 
 
@@ -16,9 +18,9 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="to_yolov8",
         description="to_yolov8 package can do the following conversion:\n"
-        "- Takes an source_folder with the YOLO format (e.g. exported from Label Studio)\n"
-        "- Creates the expected YOLOV8 folder structure and data.yaml file\n"
-        "- Splits the original YOLO dataset into train test validation",
+                    "- Takes an source_folder with the YOLO format (e.g. exported from Label Studio)\n"
+                    "- Creates the expected YOLOV8 folder structure and data.yaml file\n"
+                    "- Splits the original YOLO dataset into train test validation",
     )
     parser.add_argument(
         "--source_dir",
@@ -29,12 +31,13 @@ def parse_arguments() -> argparse.Namespace:
         "--dest_dir",
         help="Path to the destination directory where the YOLOv8 formatted dataset will "
              "be stored.\n"
-        "If not specified, the source directory will be used.",
+             "If not specified, the source directory will be used.",
     )
     parser.add_argument(
         "--split",
         help="Custom split ratios for training, testing, and validation sets. \n"
-        "The default is 70% training, 10% testing, and 20% validation",
+             "The default is 70% training, 10% testing, and 20% validation. \n"
+             "Example: 70,10,20",
     )
     return parser.parse_args()
 
@@ -42,7 +45,7 @@ def parse_arguments() -> argparse.Namespace:
 def validate_split(split: Tuple[float, ...]) -> bool:
     """
     Validates that the sum of the split values are under 100
-    :param split: User given split valus in form '70,20,10'
+    :param split: User given split values in form '70,20,10'
     :return: bool
     """
     try:
@@ -71,25 +74,29 @@ def main():
         train, _, valid = split
 
         converter = YoloToYolov8Converter()
+        if converter.is_dir_empty(source_dir=source_dir):
+            raise FileNotFoundError("Source dir is empty")
         converter.convert(
             source_dir=source_dir, dest_dir=dest_dir, train_ratio=train, val_ratio=valid
         )
-
+    except InvalidDirectoryStructureError as exc:
+        print(f"YOLO input directories are missing: {exc}", file=sys.stderr)
+        sys.exit(1)
     except ValueError as exc:
-        print(f"Invalid value provided: {exc}")
-        return 1
+        print(f"Invalid value provided: {exc}", file=sys.stderr)
+        sys.exit(1)
     except FileNotFoundError as exc:
-        print(f"The file was not found: {exc}")
-        return 1
+        print(f"The file/directory was not found: {exc}", file=sys.stderr)
+        sys.exit(1)
     except PermissionError as exc:
-        print(f"Permission denied for file: {exc}")
-        return 1
+        print(f"Permission denied for file: {exc}", file=sys.stderr)
+        sys.exit(1)
     except OSError as exc:
-        print(f"An error occurred while opening the file: {exc}")
-        return 1
+        print(f"An error occurred while opening the file: {exc}", file=sys.stderr)
+        sys.exit(1)
     except Exception as exc:
-        print(f"An unexpected error occurred: {exc}")
-        return 1
+        print(f"An unexpected error occurred: {exc}, Type: {type(exc)}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -4,24 +4,21 @@ Module to handle yolov8 converter
 import random
 import shutil
 from pathlib import Path
-from typing import Union
+from typing import Union, Tuple
 
 import yaml
 
 from .converter import Converter
+from .custom_errors import InvalidDirectoryStructureError
 
 
 class YoloToYolov8Converter(Converter):
-    """
-    Yolo to Yolov8 specific converter.
-    """
-
     def convert(
-        self,
-        source_dir: Path,
-        dest_dir: Union[None, Path] = None,
-        train_ratio: float = 0.7,
-        val_ratio: float = 0.2,
+            self,
+            source_dir: Path,
+            dest_dir: Union[None, Path] = None,
+            train_ratio: float = 0.7,
+            val_ratio: float = 0.2,
     ) -> None:
         work_dir = dest_dir if dest_dir else source_dir
         self._validate_yolo_dir_structure(source_dir=source_dir)
@@ -34,41 +31,21 @@ class YoloToYolov8Converter(Converter):
 
     @staticmethod
     def _validate_yolo_dir_structure(source_dir: Path) -> bool:
-        """
-        Validates  that the YOLO folder structure is as expected
-        :param source_dir:
-        :return: bool
-        """
         required_paths = {
             "images": source_dir / "images",
             "labels": source_dir / "labels",
             "classes.txt": source_dir / "classes.txt",
         }
-        try:
-            if not any((source_dir.is_dir(), source_dir.exists())):
-                print(f"Could not find {source_dir}")
-                return False
-            for path in required_paths.values():
-                if not path.exists():
-                    print(
-                        "Source directory doesn't match expected YOLO structure\n"
-                        f"Missing: {path}"
-                    )
-                    return False
-            return True
-        except ValueError as exc:
-            raise ValueError(f"Could not find {source_dir}") from exc
-        except PermissionError as exc:
-            raise PermissionError(f"Permission denied: {source_dir}") from exc
-        except OSError as exc:
-            raise OSError(f"An error occured while opening: {source_dir}") from exc
+        if not source_dir.is_dir():
+            raise InvalidDirectoryStructureError("Missing source dir")
+        for path in required_paths.values():
+            if not path.exists():
+                raise InvalidDirectoryStructureError(
+                    "Input data must conform to the YOLO export format (/images, /labels, classes.txt, notes.json)")
 
-    def _create_directory_structure(
-        self, source_dir: Path, dest_dir: Union[Path, None], overwrite: bool = False
-    ) -> None:
-        """
-        Creates the yolov8 folder structure
-        """
+    @staticmethod
+    def _create_directory_structure(source_dir: Path, dest_dir: Union[Path, None], overwrite: bool = True
+                                    ) -> None:
         work_dir = dest_dir if dest_dir else source_dir
         categories = ["images", "labels"]
         dir_structure = {"train": categories, "test": categories, "valid": categories}
@@ -77,22 +54,23 @@ class YoloToYolov8Converter(Converter):
                 path = work_dir / cat / folder
                 if not overwrite:
                     if path.exists():
-                        raise FileExistsError("File already exists! Delete and retry.")
+                        raise FileExistsError("Path already exists! Delete it and retry.")
                 else:
                     if path.exists():
                         shutil.rmtree(path)
+
                     path.mkdir(parents=True, exist_ok=True)
 
     # Logic to create the directory structure for YOLOv8
-
+    @staticmethod
     def _split_datasets(
-        self, source_dir: Path, dest_dir: Union[Path, None], train_ratio: float, val_ratio: float
+            source_dir: Path, dest_dir: Union[Path, None], train_ratio: float, val_ratio: float
     ) -> None:
         input_img_dir = source_dir / "images"
         output_img_dir = source_dir / "labels"
 
         if not any((input_img_dir.exists(), output_img_dir.exists())):
-            raise FileNotFoundError(f"Yolo specific folder not found: {input_img_dir,}")
+            raise FileNotFoundError(f"Yolo specific folder not found: {input_img_dir}")
 
         images = [image for image in input_img_dir.iterdir()]
         labels = [label for label in output_img_dir.iterdir()]
@@ -120,12 +98,11 @@ class YoloToYolov8Converter(Converter):
                 subset = "valid"
             else:
                 subset = "test"
-            # shutil.move(str(img), str(dest_dir / subset / "images" / image_name))
-            # shutil.move(str(label), str(dest_dir / subset / "labels" / label_name))
             shutil.copy(str(img), str(dest_dir / subset / "images" / image_name))
             shutil.copy(str(label), str(dest_dir / subset / "labels" / label_name))
 
-    def _create_data_yaml(self, dest_dir: Path, class_file: Path):
+    @staticmethod
+    def _create_data_yaml(dest_dir: Path, class_file: Path):
         with class_file.open() as f:
             classes = [line.strip() for line in f.readlines()]
 
@@ -149,3 +126,9 @@ class YoloToYolov8Converter(Converter):
             return classes_file[0]
         except IndexError as exc:
             raise FileNotFoundError("No classes.txt file found") from exc
+
+    @staticmethod
+    def is_dir_empty(source_dir: Path):
+        imgs = [img for img in source_dir.iterdir()]
+        if not imgs:
+            raise FileNotFoundError("Source folder is empty")
