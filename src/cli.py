@@ -1,6 +1,7 @@
 """
 Main entry
 """
+
 import argparse
 import sys
 from pathlib import Path
@@ -18,9 +19,9 @@ def parse_arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="to_yolov8",
         description="to_yolov8 package can do the following conversion:\n"
-                    "- Takes an source_folder with the YOLO format (e.g. exported from Label Studio)\n"
-                    "- Creates the expected YOLOV8 folder structure and data.yaml file\n"
-                    "- Splits the original YOLO dataset into train test validation",
+        "- Takes an source_folder with the YOLO format (e.g. exported from Label Studio)\n"
+        "- Creates the expected YOLOV8 folder structure and data.yaml file\n"
+        "- Splits the original YOLO dataset into train test validation",
     )
     parser.add_argument(
         "--source_dir",
@@ -30,14 +31,14 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "--dest_dir",
         help="Path to the destination directory where the YOLOv8 formatted dataset will "
-             "be stored.\n"
-             "If not specified, the source directory will be used.",
+        "be stored.\n"
+        "If not specified, the source directory will be used.",
     )
     parser.add_argument(
         "--split",
         help="Custom split ratios for training, testing, and validation sets. \n"
-             "The default is 70% training, 10% testing, and 20% validation. \n"
-             "Example: 70,10,20",
+        "The default is 70% training, 10% testing, and 20% validation. \n"
+        "Example: 70,10,20",
     )
     return parser.parse_args()
 

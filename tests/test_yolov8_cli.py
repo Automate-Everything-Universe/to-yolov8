@@ -47,6 +47,8 @@ def test_yolov8_converter_class(source_dir, dest_dir):
 
     # Clean up
     shutil.rmtree(dest_dir)
+
+
 def test_yolov8_empty_dir(empty_dir):
     command = [
         "python",
@@ -56,8 +58,12 @@ def test_yolov8_empty_dir(empty_dir):
     ]
 
     result = subprocess.run(command, capture_output=True, check=False, text=True, timeout=180)
-    assert result.returncode == 1, "Expected a non-zero return code for invalid directory structure."
+    assert (
+        result.returncode == 1
+    ), "Expected a non-zero return code for invalid directory structure."
 
     # Check that the expected error message is in stderr
     expected_error_message = "The file/directory was not found"
-    assert expected_error_message in result.stderr, f"Expected error message '{expected_error_message}' not found in stderr."
+    assert (
+        expected_error_message in result.stderr
+    ), f"Expected error message '{expected_error_message}' not found in stderr."

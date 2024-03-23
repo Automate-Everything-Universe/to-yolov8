@@ -1,10 +1,11 @@
 """
 Module to handle yolov8 converter
 """
+
 import random
 import shutil
 from pathlib import Path
-from typing import Union, Tuple
+from typing import Union
 
 import yaml
 
@@ -14,11 +15,11 @@ from .custom_errors import InvalidDirectoryStructureError
 
 class YoloToYolov8Converter(Converter):
     def convert(
-            self,
-            source_dir: Path,
-            dest_dir: Union[None, Path] = None,
-            train_ratio: float = 0.7,
-            val_ratio: float = 0.2,
+        self,
+        source_dir: Path,
+        dest_dir: Union[None, Path] = None,
+        train_ratio: float = 0.7,
+        val_ratio: float = 0.2,
     ) -> None:
         work_dir = dest_dir if dest_dir else source_dir
         self._validate_yolo_dir_structure(source_dir=source_dir)
@@ -41,11 +42,14 @@ class YoloToYolov8Converter(Converter):
         for path in required_paths.values():
             if not path.exists():
                 raise InvalidDirectoryStructureError(
-                    "Input data must conform to the YOLO export format (/images, /labels, classes.txt, notes.json)")
+                    "Input data must conform to the YOLO export format "
+                    "(/images, /labels, classes.txt, notes.json)"
+                )
 
     @staticmethod
-    def _create_directory_structure(source_dir: Path, dest_dir: Union[Path, None], overwrite: bool = True
-                                    ) -> None:
+    def _create_directory_structure(
+        source_dir: Path, dest_dir: Union[Path, None], overwrite: bool = True
+    ) -> None:
         work_dir = dest_dir if dest_dir else source_dir
         categories = ["images", "labels"]
         dir_structure = {"train": categories, "test": categories, "valid": categories}
@@ -64,7 +68,7 @@ class YoloToYolov8Converter(Converter):
     # Logic to create the directory structure for YOLOv8
     @staticmethod
     def _split_datasets(
-            source_dir: Path, dest_dir: Union[Path, None], train_ratio: float, val_ratio: float
+        source_dir: Path, dest_dir: Union[Path, None], train_ratio: float, val_ratio: float
     ) -> None:
         input_img_dir = source_dir / "images"
         output_img_dir = source_dir / "labels"

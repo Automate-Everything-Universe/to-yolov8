@@ -1,6 +1,7 @@
 """
 Interface for the converter pater.
 """
+
 from abc import ABC
 from abc import abstractmethod
 from pathlib import Path
