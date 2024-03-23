@@ -1,9 +1,9 @@
 # to_yolov8
-The 'to_yolov8' package facilitates the conversion of datasets from the YOLO format (exported from [Label Studio](https://labelstud.io/)) to the YOLOv8 format, which is compatible with [Ultralytics](https://www.ultralytics.com/) models. 
+The 'to_yolov8' package facilitates the conversion of datasets from the YOLO format (exported from [Label Studio](https://labelstud.io/)) to the YOLOv8 format, which is compatible with [Ultralytics](https://www.ultralytics.com/) models.
 This utility is designed to streamline the process of preparing datasets for training and evaluating machine learning models in the YOLOv8 architecture.
 
 ## Overview
-The tool is primarily aimed at addressing the specific data formatting and splitting requirements of the YOLOv8 model. 
+The tool is primarily aimed at addressing the specific data formatting and splitting requirements of the YOLOv8 model.
 It ensures that the dataset is appropriately organized and formatted, enabling seamless integration with Ultralytics' YOLOv8 implementations.
 
 ## Key Features
@@ -13,7 +13,7 @@ It ensures that the dataset is appropriately organized and formatted, enabling s
 **Flexibility and Customization:** Supports custom splits and allows for additional files in the source directory, which are simply ignored during the conversion process.
 
 ## Installation
-To install, run: 
+To install, run:
 ```shell
 pip install to_yolov8
 ```
